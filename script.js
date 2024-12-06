@@ -7,6 +7,14 @@ function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Return a random item from the array.
+//
+// array - The array to get the random item from.
+function randomItem(array) {
+    const max = array.length - 1;
+    return array[randomInteger(0, max)];
+}
+
 // Ensure the piece of text begins with a capital letter, and ends with a
 // ending punctuation mark. Returns the modified piece of text.
 //
@@ -25,19 +33,26 @@ function makeSentence(text) {
 function eightBall(questionSubject, questionTopic) {
     const responsePieces = {
         prefix: ['it is', 'it is not'],
-        middle: ['likely that', 'unlikely that'],
-        suffix: [''],
+        middle: ['likely that', 'unlikely that', 'possible that'],
+        suffix: ['is', 'is not'],
         random: ['don\'t look at me like that!', 'what are you talking about?'],
     };
+
+    // A quick and dirty function to get a random string from the response
+    // piece array.
+    const getBrandom = (pee) => randomItem(responsePieces[pee]);
     // Replace 'my' with 'your' in case questionSubject contains 'my'
     questionSubject = questionSubject.replace('my', 'your');
 
     let response;
     if (randomInteger(1, 5) === 1) {
-        response = responsePieces.random[randomInteger(0, responsePieces.random.length - 1)];
+        response = getBrandom('random');
     } else {
-        response = nm;
+        response = `${getBrandom('prefix')} ${getBrandom('middle')} ${questionSubject} ${getBrandom('suffix')} ${questionTopic}`;
     }
 
     return makeSentence(response);
 }
+
+// An example of how to use this code
+console.log(eightBall('the author of this code', 'an absolute idiot'));
